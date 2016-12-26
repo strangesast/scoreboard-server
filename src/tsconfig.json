@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "mapRoot": "./",
-    "module": "es6",
+    "module": "commonjs",
     "moduleResolution": "node",
     "sourceMap": true,
     "emitDecoratorMetadata": true,
@@ -13,9 +13,7 @@
     "typeRoots": [
       "../node_modules/@types/"
     ],
-    "types": [
-      "core-js"
-    ]
+    "types": []
   },
   "compileOnSave": true
 }

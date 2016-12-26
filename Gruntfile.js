@@ -1,37 +1,57 @@
+var path = require('path');
 module.exports = function(grunt) {
-  grunt.loadNpmTasks('grunt-ts');
+  grunt.loadNpmTasks('grunt-webpack');
   grunt.loadNpmTasks('grunt-nodemon');
   grunt.loadNpmTasks('grunt-concurrent');
 
-  grunt.initConfig({
-    ts: {
-      default: {
-        src: [ 'src/**/*.ts' ],
-        watch: 'src',
+	var webpack = require("webpack");
+	var webpackConfig = require("./webpack.config.js");
+
+	grunt.initConfig({
+    webpack: {
+      options: webpackConfig,
+      build: {
+        plugins: webpackConfig.plugins.concat(
+          new webpack.DefinePlugin({
+            "process.env": {
+              "NODE_ENV": JSON.stringify("production")
+            }
+          }),
+          new webpack.optimize.DedupePlugin(),
+          new webpack.optimize.UglifyJsPlugin()
+        )
+      },
+      "build-dev": {
+        devtool: "sourcemap",
+        debug: true
+      }
+    },
+    watch: {
+      app: {
+        files: ["app/**/*", "web_modules/**/*"],
+        tasks: ["webpack:build-dev"],
         options: {
-          rootDir: 'src/'
-        },
-        outDir: 'dist/',
-        tsconfig: './src/tsconfig.json'
+          spawn: false
+        }
       }
     },
     nodemon: {
       base: {
-        script: 'dist/index.js',
-        options: {
-          watch: ['dist']
-        }
+        script: path.join(
+                    webpackConfig.output.path,
+                    webpackConfig.output.filename
+                    ),
+        options: { watch: ['dist'] }
       }
     },
     concurrent: {
       target: {
-        tasks: ['ts', 'nodemon'],
-        options: {
-          logConcurrentOutput: true
-        }
+        tasks: ['webpack:build-dev', 'watch'],
+        options: { logConcurrentOutput: true }
       }
     }
   });
 
-  grunt.registerTask('default', ['concurrent'])
-}
+  grunt.registerTask("default", ["webpack:build-dev", "concurrent"]);
+  grunt.registerTask("build", ["webpack:build"]);
+};
