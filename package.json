@@ -1,0 +1,23 @@
+{
+  "name": "scoreboard-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/strangesast/scoreboard-server.git"
+  },
+  "author": "Sam Zagrobelny <strangesast@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/strangesast/scoreboard-server/issues"
+  },
+  "homepage": "https://github.com/strangesast/scoreboard-server#readme",
+  "dependencies": {
+    "express": "^4.14.1",
+    "noble": "^1.8.0"
+  }
+}
